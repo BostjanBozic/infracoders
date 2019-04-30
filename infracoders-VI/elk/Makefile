@@ -12,9 +12,9 @@ undeploy-es:
 deploy-kibana:
 	@kubectl apply -f kibana-svc.yaml; \
 	kubectl apply -f kibana-cm.yaml; \
-	kubectl apply -f kibana-deployment.yaml; \
+	kubectl apply -f kibana-node.yaml; \
 
 undeploy-kibana:
 	@kubectl delete -f kibana-svc.yaml; \
 	kubectl delete -f kibana-cm.yaml; \
-	kubectl delete -f kibana-deployment.yaml; \
+	kubectl delete -f kibana-node.yaml; \
