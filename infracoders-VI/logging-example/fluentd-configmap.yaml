@@ -10,9 +10,9 @@ data:
       delimiter ;
       keys timestamp,message,number
       types message:string,number:integer
-      path /data/infracoders/logs/test_log_*
-      path_key tailed_test_log_path
-      pos_file /data/infracoders/test_logs.pos
+      path /data/infracoders/logs/infracoders_log_*
+      path_key tailed_infracoders_log_path
+      pos_file /data/infracoders/infracoders_logs.pos
       tag infracoders
     </source>
     <match infracoders>
@@ -20,7 +20,7 @@ data:
       @type elasticsearch
       type_name _doc
       include_tag_key true
-      host elasticsearch-node-0.exokube.eu
+      host elasticsearch
       port 9200
       scheme http
       index_name "#{ENV['LOG_NAME']}.${tag}.%Y%m%d%H"

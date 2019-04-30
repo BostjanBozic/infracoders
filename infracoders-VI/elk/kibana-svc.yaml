@@ -9,7 +9,7 @@ spec:
     k8s-app: kibana-infracoders
   ports:
   - name: http
-    nodePort: 30010
+    nodePort: 31000
     port: 5601
     targetPort: http
   type: NodePort

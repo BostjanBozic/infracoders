@@ -1,19 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: '@@K8S_NAME@@'
+  name: infracoders-logging
   labels:
-    app: '@@K8S_NAME@@'
+    app: infracoders-logging
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: '@@K8S_NAME@@'
+        app: infracoders-logging
     spec:
       containers:
-      - name: '@@K8S_NAME@@'
-        image: '@@IMAGE_REF@@'
+      - name: infracoders-logging
+        image: bostjanbozic/infracoders-logging:latest
         volumeMounts:
           - name: app-logs
             mountPath: /data/infracoders/logs
@@ -24,7 +24,7 @@ spec:
           - name: FLUENTD_ARGS
             value: -c /fluentd/etc/fluent.conf -p /fluentd/plugins
           - name: LOG_NAME
-            value: "infacoders_logs"
+            value: "infracoders_logs"
         volumeMounts:
           - name: app-logs
             mountPath: /data/infracoders/logs

@@ -1,9 +1,7 @@
 REGISTRY_NAME = bostjanbozic
-IMAGE_NAME = infracoders_logging
+IMAGE_NAME = infracoders-logging
 TAG = 0.0.1
 IMAGE_REF = $(REGISTRY_NAME)/$(IMAGE_NAME):$(TAG)
-
-K8S_DEFINITION = logging-deployment.yaml
 
 #
 # Docker targets
@@ -19,11 +17,13 @@ push:
 	docker push $(REGISTRY_NAME)/$(IMAGE_NAME):latest
 
 deploy:
-	sed 's|@@IMAGE_REF@@|$(IMAGE_REF)|g' $(K8S_DEFINITION) \
-		| sed 's|@@K8S_NAME@@|infracoders-logging|g' \
-		| kubectl apply -f  -
+	@kubectl apply -f logging-deployment.yaml;
 
 undeploy:
-	sed 's|@@IMAGE_REF@@|$(IMAGE_REF)|g' $(K8S_DEFINITION) \
-		| sed 's|@@K8S_NAME@@|infracoders-logging|g' \
-		| kubectl delete -f  -
+	@kubectl delete -f logging-deployment.yaml;
+
+deploy-configmap:
+	@kubectl apply -f fluentd-configmap.yaml;
+
+undeploy-configmap:
+	@kubectl delete -f fluentd-configmap.yaml;
