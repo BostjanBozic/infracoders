@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: '@@K8S_NAME@@'
+  labels:
+    app: '@@K8S_NAME@@'
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: '@@K8S_NAME@@'
+    spec:
+      containers:
+      - name: '@@K8S_NAME@@'
+        image: '@@IMAGE_REF@@'
+        volumeMounts:
+          - name: app-logs
+            mountPath: /data/infracoders/logs
+      - name: fluentd-logging
+        image: bostjanbozic/fluentd:latest
+        imagePullPolicy: Always
+        env:
+          - name: FLUENTD_ARGS
+            value: -c /fluentd/etc/fluent.conf -p /fluentd/plugins
+          - name: LOG_NAME
+            value: "infacoders_logs"
+        volumeMounts:
+          - name: app-logs
+            mountPath: /data/infracoders/logs
+          - name: config-volume
+            mountPath: /fluentd/etc
+
+      volumes:
+        - name: app-logs
+          emptyDir: {}
+        - name: config-volume
+          configMap:
+            name: infracoders-logs-config
