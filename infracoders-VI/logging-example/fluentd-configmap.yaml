@@ -6,15 +6,25 @@ data:
   fluent.conf: |
     <source>
       @type tail
-      format csv
-      delimiter ;
-      keys timestamp,message,number
-      types message:string,number:integer
+      <parse>
+        @type csv
+        delimiter ;
+        keys timestamp,message,number
+        types message:string,number:integer
+      </parse>
       path /data/infracoders/logs/infracoders_log_*
       path_key tailed_infracoders_log_path
       pos_file /data/infracoders/infracoders_logs.pos
       tag infracoders
     </source>
+
+    <filter infracoders>
+      @type record_transformer
+      <record>
+        host_param "#{Socket.gethostname}"
+      </record>
+    </filter>
+
     <match infracoders>
       @id elasticsearch
       @type elasticsearch
@@ -26,6 +36,7 @@ data:
       index_name "#{ENV['LOG_NAME']}.${tag}.%Y%m%d%H"
       <buffer tag, time>
         timekey 30
-        timekey_wait 30
+        timekey_wait 10
       </buffer>
     </match>
+    
