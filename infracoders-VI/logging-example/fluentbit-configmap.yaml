@@ -4,16 +4,33 @@ metadata:
   name: infracoders-logs-config-fluentbit
 data:
   fluent-bit.conf: |
+    [SERVICE]
+      Flush 10
+      Parsers_File parsers.conf
+
     [INPUT]
       Name tail
+      Parser json
       Path /data/infracoders/logs/infracoders_log_fluentbit_*
+      Path_Key infracoders_fluentbit_log_path
+      DB /data/infracoders/infracoders_fluentbit_logs.pos
       Tag infracoders_fluentbit
-    
+
+    [FILTER]
+      Name record_modifier
+      Match infracoders_fluentbit
+      Record host_param ${HOSTNAME}
+
     [OUTPUT]
       Name es
       Match infracoders_fluentbit
+      Type _doc
+      Include_Tag_Key On
       Host elasticsearch
       Port 9200
-      Index fluentbit
-      Type _doc
-    
+      Index ${LOG_NAME}.%Y%m%d%H
+
+  parsers.conf: |
+    [PARSER]
+      Name json
+      Format json
