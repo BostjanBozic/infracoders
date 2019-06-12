@@ -1,19 +1,20 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: infracoders-logging
+  name: infracoders-logging-fluentd
   labels:
-    app: infracoders-logging
+    app: infracoders-logging-fluentd
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: infracoders-logging
+        app: infracoders-logging-fluentd
     spec:
       containers:
       - name: infracoders-logging
         image: bostjanbozic/infracoders-logging:latest
+        imagePullPolicy: Always
         volumeMounts:
           - name: app-logs
             mountPath: /data/infracoders/logs
@@ -22,9 +23,9 @@ spec:
         imagePullPolicy: Always
         env:
           - name: FLUENTD_ARGS
-            value: -c /fluentd/etc/fluent.conf -p /fluentd/plugins
+            value: -c /fluentd/etc/fluentd.conf -p /fluentd/plugins
           - name: LOG_NAME
-            value: "infracoders_logs"
+            value: "infracoders_logs_fluentd"
         volumeMounts:
           - name: app-logs
             mountPath: /data/infracoders/logs
@@ -36,4 +37,4 @@ spec:
           emptyDir: {}
         - name: config-volume
           configMap:
-            name: infracoders-logs-config
+            name: infracoders-logs-config-fluentd

@@ -16,14 +16,26 @@ push:
 	docker push $(REGISTRY_NAME)/$(IMAGE_NAME):$(TAG)
 	docker push $(REGISTRY_NAME)/$(IMAGE_NAME):latest
 
-deploy:
-	@kubectl apply -f logging-deployment.yaml;
+deploy-fluentd:
+	@kubectl apply -f fluentd-deployment.yaml;
 
-undeploy:
-	@kubectl delete -f logging-deployment.yaml;
+undeploy-fluentd:
+	@kubectl delete -f fluentd-deployment.yaml;
 
-deploy-configmap:
+deploy-fluentd-configmap:
 	@kubectl apply -f fluentd-configmap.yaml;
 
-undeploy-configmap:
+undeploy-fluentd-configmap:
 	@kubectl delete -f fluentd-configmap.yaml;
+
+deploy-fluentbit:
+	@kubectl apply -f fluentbit-deployment.yaml;
+
+undeploy-fluentbit:
+	@kubectl delete -f fluentbit-deployment.yaml;
+
+deploy-fluentbit-configmap:
+	@kubectl apply -f fluentbit-configmap.yaml;
+
+undeploy-fluentbit-configmap:
+	@kubectl delete -f fluentbit-configmap.yaml;

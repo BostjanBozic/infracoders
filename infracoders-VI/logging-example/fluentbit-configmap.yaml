@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: infracoders-logs-config-fluentbit
+data:
+  fluent-bit.conf: |
+    [INPUT]
+      Name tail
+      Path /data/infracoders/logs/infracoders_log_fluentbit_*
+      Tag infracoders_fluentbit
+    
+    [OUTPUT]
+      Name es
+      Match infracoders_fluentbit
+      Host elasticsearch
+      Port 9200
+      Index fluentbit
+      Type _doc
+    

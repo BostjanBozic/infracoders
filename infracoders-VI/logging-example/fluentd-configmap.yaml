@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: infracoders-logs-config
+  name: infracoders-logs-config-fluentd
 data:
-  fluent.conf: |
+  fluentd.conf: |
     <source>
       @type tail
       <parse>
@@ -12,20 +12,20 @@ data:
         keys timestamp,message,number
         types message:string,number:integer
       </parse>
-      path /data/infracoders/logs/infracoders_log_*
-      path_key tailed_infracoders_log_path
-      pos_file /data/infracoders/infracoders_logs.pos
-      tag infracoders
+      path /data/infracoders/logs/infracoders_log_fluentd_*
+      path_key infracoders_fluentd_log_path
+      pos_file /data/infracoders/infracoders_fluentd_logs.pos
+      tag infracoders_fluentd
     </source>
 
-    <filter infracoders>
+    <filter infracoders_fluentd>
       @type record_transformer
       <record>
         host_param "#{Socket.gethostname}"
       </record>
     </filter>
 
-    <match infracoders>
+    <match infracoders_fluentd>
       @id elasticsearch
       @type elasticsearch
       type_name _doc
