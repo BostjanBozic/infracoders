@@ -1,40 +1,18 @@
-FROM alpine:3.5
-LABEL maintainer Bostjan Bozic <bozic.bostjann@gmail.com>
+FROM fluent/fluentd:v1.12-1
 
-ENV DUMB_INIT_VERSION=1.2.0
-ENV SU_EXEC_VERSION=0.2
+# Use root account to use apk
+USER root
 
-
-# Do not split this into multiple RUN!
-# Docker creates a layer for every RUN-Statement
-# therefore an 'apk delete' has no effect
-RUN apk update \
- && apk add --no-cache \
-        ca-certificates \
-        ruby ruby-irb \
-        su-exec==${SU_EXEC_VERSION}-r0 \
-        dumb-init==${DUMB_INIT_VERSION}-r0 \
- && apk add --no-cache --virtual .build-deps \
-        build-base \
-        ruby-dev gnupg \
- && echo 'gem: --no-document' >> /etc/gemrc \
- && gem install oj -v 3.7.12 \
- && gem install json -v 2.2.0 \
- && gem install fluentd -v 1.4.2 \
+# below RUN includes plugin as examples elasticsearch is not required
+# you may customize including plugins as you wish
+RUN apk add --no-cache --update --virtual .build-deps \
+        sudo build-base ruby-dev \
+ && sudo gem install fluent-plugin-elasticsearch \
+ && sudo gem sources --clear-all \
  && apk del .build-deps \
  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
 
-# for log storage (maybe shared with host) and  configuration/plugins path (default: copied from .)
-RUN mkdir -p /fluentd/log /fluentd/etc /fluentd/plugins
+COPY fluent.conf /fluentd/etc/
+COPY entrypoint.sh /bin/
 
-RUN addgroup -S fluent && adduser -S -g fluent fluent
-RUN chown -R fluent /fluentd && chgrp -R fluent /fluentd
-
-RUN fluent-gem install fluent-plugin-elasticsearch
-
-ENV LD_PRELOAD=""
-ENV DUMB_INIT_SETSID 0
-
-EXPOSE 24224 5140
-
-CMD fluentd $FLUENTD_ARGS
+USER fluent
