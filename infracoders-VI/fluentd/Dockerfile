@@ -1,5 +1,5 @@
 FROM alpine:3.5
-MAINTAINER Bostjan Bozic <bozic.bostjann@gmail.com>
+LABEL maintainer Bostjan Bozic <bozic.bostjann@gmail.com>
 
 ENV DUMB_INIT_VERSION=1.2.0
 ENV SU_EXEC_VERSION=0.2

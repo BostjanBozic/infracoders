@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-MAINTAINER Bostjan Bozic <bozic.bostjann@gmail.com>
+LABEL maintainer Bostjan Bozic <bozic.bostjann@gmail.com>
 
 WORKDIR /
 
