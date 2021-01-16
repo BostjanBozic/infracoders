@@ -8,13 +8,10 @@ jobs:
   build_push:
     runs-on: ubuntu-latest
     env:
-      working-directory: ./infracoders-VI/fluentd
+      working-directory: ./
     steps:
       - uses: actions/checkout@v2.3.2
         name: Check out code
-      
-      - name: post path
-        run: pwd
       
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
@@ -22,6 +19,7 @@ jobs:
           image: bostjanbozic/fluentd
           tags: 0.0.2, latest
           registry: docker.io
-          dockerfile: Dockerfile
+          dockerfile: ./infracoders-VI/fluentd/Dockerfile
+          directory: ./infracoders-VI/fluentd
           username: ${{ secrets.REPO_USER }}
           password: ${{ secrets.REPO_PASS }}

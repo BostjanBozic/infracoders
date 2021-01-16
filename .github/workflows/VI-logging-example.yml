@@ -19,6 +19,7 @@ jobs:
           image: bostjanbozic/infracoders-logging
           tags: 0.0.2, latest
           registry: docker.io
-          dockerfile: Dockerfile
+          dockerfile: ./infracoders-VI/logging-example/Dockerfile
+          directory: ./infracoders-VI/logging-example
           username: ${{ secrets.REPO_USER }}
           password: ${{ secrets.REPO_PASS }}
