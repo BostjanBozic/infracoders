@@ -10,6 +10,7 @@ spec:
   selector:
     matchLabels:
      component: kibana
+     k8s-app: kibana-infracoders
   template:
     metadata:
       labels:

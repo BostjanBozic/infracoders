@@ -6,6 +6,10 @@ metadata:
     app: infracoders-logging-fluentd
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      labels:
+        app: infracoders-logging-fluentd
   template:
     metadata:
       labels:

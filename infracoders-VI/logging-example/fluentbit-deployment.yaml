@@ -6,6 +6,10 @@ metadata:
     app: infracoders-logging-fluentbit
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      labels:
+        app: infracoders-logging-fluentbit
   template:
     metadata:
       labels:
